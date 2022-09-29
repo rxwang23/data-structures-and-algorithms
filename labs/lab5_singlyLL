@@ -1,0 +1,97 @@
+class SinglyLinkedList:
+    class Node:
+        def __init__(self, data=None, next=None):
+            self.data = data
+            self.next = next
+
+        def disconnect(self):
+            self.data = None
+            self.next = None
+
+    def __init__(self):
+        self.header = SinglyLinkedList.Node()
+        self.size = 0
+        self.last = self.header
+
+    def __len__(self):
+        return self.size
+
+    def is_empty(self):
+        return self.size == 0
+
+    def add_after(self, node, val):
+        """
+        creates a new node containing val as its data and adds it after existing node in SLL
+        """
+        new_node = SinglyLinkedList.Node(val)
+        new_node.next = node.next
+        node.next = new_node
+        self.size += 1
+        return new_node
+
+    def add_before(self, node, val):
+        """
+        creates a new node containing val as its data and adds it before existing node in SLL
+        """
+        curr = self.header
+        while curr.next is not node:
+            curr = curr.next
+        new_node = SinglyLinkedList.Node(val)
+        curr.next = new_node
+        new_node.next = node
+        self.size += 1
+        return new_node
+
+    def add_first(self, elem):
+        """
+        creates new node containing val as its data and adds it to the front of SLL
+        """
+        node = self.add_after(self.header, elem)
+        if len(self) == 1:
+            self.last = node
+        return self.last
+
+    def add_last(self, val):
+        """
+        creates new node containing val as its data and adds it to the back of SLL
+        """
+        self.last = self.add_after(self.last, val)
+        return self.last
+
+    def delete_node(self, node):
+        """
+        removes an existing node from the SLL and returns its value
+        """
+        curr = self.header
+        while curr.next is not node:
+            curr = curr.next
+        curr.next = node.next
+        self.size -= 1
+
+        val = node.data
+        node.disconnect()
+        return val
+
+    def delete_first(self):
+        if self.is_empty():
+            raise Exception("list is empty")
+        return self.delete_node(self.header.next)
+
+    def delete_last(self):
+        if self.is_empty():
+            raise Exception("list is empty")
+        curr = self.header
+        while curr.next is not self.last:
+            curr = curr.next
+        val = self.delete_node(self.last)
+        self.last = curr
+        return val
+
+    def __iter__(self):
+        cursor = self.header.next
+        while cursor is not None:
+            yield cursor.data
+            cursor = cursor.next
+
+    def __repr__(self):
+        return "[" + " ->".join([str[elem] for elem in self]) + "]"
