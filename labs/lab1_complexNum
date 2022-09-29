@@ -1,0 +1,42 @@
+class Complex:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def __add__(self, other):
+        return Complex(self.a + other.a, self.b + other.b)
+
+    def __sub__(self, other):
+        return Complex(self.a - other.a, self.b - other.b)
+
+    def __mul__(self, other):
+        real = self.a * other.a - self.b * other.b
+        imaginary = self.a * other.b + self.b * other.a
+        return Complex(real, imaginary)
+
+    def __repr__(self):
+        if "-" in str(self.b):
+            return str(self.a) + str(self.b) + "i"
+        else:
+            return str(self.a) + "+" + str(self.b) + "i"
+
+    def __iadd__(self, other):
+        self.a += other.a
+        self.b += other.b
+        return self
+
+
+cplx1 = Complex(5, 2)
+print(cplx1)
+
+cplx2 = Complex(3, 3)
+print(cplx2)
+
+print(cplx1 + cplx2)
+
+print(cplx1 - cplx2)
+
+print(cplx1 * cplx2)
+
+print(cplx1)
+print(cplx2)
