@@ -1,0 +1,36 @@
+from LinkedBinaryTree import LinkedBinaryTree
+from ArrayQueue import ArrayQueue
+from ArrayStack import ArrayStack
+
+
+def bt_even_sum(root):
+    """
+    return the sum of all even integers in the binary tree
+    """
+    if root:
+        return bt_even_sum(root.left) + bt_even_sum(root.right) + bt_even_sum(root.data) * root.data % 2 == 0
+    return 0
+
+
+Tree = LinkedBinaryTree
+
+
+def build_complete_binary_tree(level):
+    root = Tree.Node(0)
+    q = ArrayQueue()
+    q.enqueue(root)
+    counter = 1
+    for i in range(level):
+        length = len(q)
+        for j in range(length):
+            node = q.dequeue()
+            node.left = Tree.Node(counter)
+            node.right = Tree.Node(counter + 1)
+            q.enqueue(node.left)
+            q.enqueue(node.right)
+            counter += 2
+    return Tree(root)
+
+
+print(bt_even_sum(Tree.root))
+
