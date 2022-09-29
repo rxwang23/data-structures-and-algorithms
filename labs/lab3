@@ -1,0 +1,48 @@
+def find_min(lst, low, high):
+    """
+    :param lst: list
+    :param low: int
+    :param high: int
+    :return: int
+    """
+
+    if low == high:
+        return lst[low]
+
+    if lst[low] > lst[high]:
+        return find_min(lst, low+1, high)
+    elif lst[high] >= lst[low]:
+        return find_min(lst, low, high-1)
+        
+#---------------------------------------------------
+
+def deep_reverse(lst, low, high):
+    if low > high:
+        return
+
+    if isinstance(lst[low], list):
+        deep_reverse(lst[low], 0, len(lst[low]) - 1)
+
+    if low != high and isinstance(lst[high], list):
+        deep_reverse(lst[high], 0, len(lst[high]) - 1)
+
+    lst[low], lst[high] = lst[high], lst[low]
+
+    deep_reverse(lst, low + 1, high - 1)
+
+#---------------------------------------------------
+
+def yield_flattened(lst):
+    """
+    :param lst: list
+    :yield type: int
+    """
+    for elem in lst:
+        if isinstance(elem, list):
+            yield from yield_flattened(elem)  # same as -> for i in range(n): yield i
+        else:
+            yield elem
+
+
+def print_flattened(lst):
+    print("[" + ",".join(str(num) for num in yield_flattened(lst)) + "]")
