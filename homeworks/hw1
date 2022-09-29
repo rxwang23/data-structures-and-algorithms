@@ -1,0 +1,144 @@
+def shift(lst, k, direction="left"):
+    """
+    :param lst: list of N numbers
+    :param k: positive integer k (where k < N)
+    :param direction: shifted numbers circularly k steps to the left (default) o right
+    :return:
+    """
+    if direction == "right":
+        k = len(lst) - k
+    for shift_num in range(k):
+        lst.append(lst.pop(0))
+
+
+# lst = [1,2,3,4,5,6]
+# shift(lst, 2)
+# print(lst)
+#
+# lst = [1,2,3,4,5,6]
+# shift(lst, 2, "right")
+# print(lst)
+
+#---------------------------------------
+
+# a) [1, 10, 100, 1000,	10000, 100000]
+lst_a = [10**n for n in range(6)]
+
+# b) [0, 2, 6, 12, 20, 30, 42, 56, 72, 90]
+lst_b = [(n+1)**2 - (n+1) for n in range(10)]
+
+print(lst_a)
+print(lst_b)
+
+#---------------------------------------
+
+def fibs(n):
+    """
+    :param n: positive integer, therefore assume n > 0
+    :return: generator that has first n elements in Fibonacci sequence
+    """
+    x_1, x_2 = 1, 1  # first 2 numbers in Fibonacci sequence
+    for i in range(n):
+        yield x_1
+        x_1, x_2 = x_2, x_1 + x_2
+
+
+for curr in fibs(8):
+    print(curr)
+    
+    
+#---------------------------------------
+    
+class Vector:
+    def __init__(self, d):
+        if isinstance(d, int):
+            self.coords = [0]*d
+        else:
+            self.coords = d
+
+    def __len__(self):
+        return len(self.coords)
+
+    def __getitem__(self, j):
+        return self.coords[j]
+
+    def __setitem__(self, j, val):
+        self.coords[j] = val
+
+    def __add__(self, other):
+        if len(self) != len(other):
+            raise ValueError("dimensions must agree")
+        result = Vector(len(self))
+        for j in range(len(self)):
+            result[j] = self[j] + other[j]
+        return result
+
+    def __sub__(self, other):
+        if len(self) != len(other):
+            raise ValueError("dimensions must agree")
+        result = Vector(len(self))
+        for j in range(len(self)):
+            result[j] = self[j] - other[j]
+        return result
+
+    def __eq__(self, other):
+        return self.coords == other.coords
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __str__(self):
+        return "<" + str(self.coords)[1:-1] + ">"
+
+    def __repr__(self):
+        return str(self)
+
+    def __neg__(self):
+        result = Vector(len(self))
+        for num in range(len(self)):
+            result[num] = -self[num]
+        return result
+
+    def __mul__(self, other):
+        result = Vector(len(self))
+        if isinstance(other, int):
+            for each in range(len(self)):
+                result[each] = self[each] * other
+            return result
+        else:
+            if len(self) != len(other):
+                raise ValueError("dimensions must agree")
+            result_dot = 0
+            for i in range(len(self)):
+                result_dot += self[i] * other[i]
+        return result_dot
+
+    def __rmul__(self, scalar):
+        result = Vector(len(self))
+        for each in range(len(self)):
+            result[each] = scalar * self[each]
+        return result
+
+# v1 = Vector(5)
+# v1[1] = 10
+# v1[-1] = 10
+# print(v1)
+#
+# v2 = Vector([2,4,6,8,10])
+# print(v2)
+#
+# u1 = v1 + v2
+# print(u1)
+#
+# u2 = -v2
+# print(u2)
+#
+# u3 = 3 * v2  # rmul
+# print(u3)
+#
+# u4 = v2 * 3  # mul
+# print(u4)
+#
+# u5 = v1 * v2  # mul dot product
+# print(u5)
+
