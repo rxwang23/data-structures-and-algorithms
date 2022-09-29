@@ -1,0 +1,26 @@
+def add_binary(bin_num1, bin_num2):
+    """
+    bin_num1 - type: str
+    bin_num2 - type: str
+    return value - type: str
+    """
+    sum = ""  # returns string as solution
+    carry = 0
+
+    bin_num1, bin_num2 = bin_num1[::-1], bin_num2[::-1]
+
+    for i in range(max(len(bin_num1), len(bin_num2))):  # iterate through whichever one has longest string
+        digitA = ord(bin_num1[i]) - ord('0') if i < len(bin_num1) else 0
+        digitB = ord(bin_num2[i]) - ord('0') if i < len(bin_num2) else 0
+
+        total = digitA + digitB + carry
+        char = str(total % 2)
+        sum += char
+        carry = total // 2
+
+    if carry:
+        sum = '1' + sum
+    return sum
+
+
+print(add_binary("11", "1"))
