@@ -1,0 +1,57 @@
+from BinarySearchTreeMap import BinarySearchTreeMap
+from LinkedBinaryTree import LinkedBinaryTree
+from ArrayQueue import ArrayQueue
+from ArrayStack import ArrayStack
+
+
+def glt_n(bst, n):
+    """
+    returns the greatest number in the binary search tree less than or equal to n
+    """
+    curr = bst.root
+    gltn = -1
+
+    while curr is not None:
+
+        if n > curr.item.key:
+            gltn = curr.item.key
+            curr = curr.right
+
+        elif n < curr.item.key:
+            curr = curr.left
+
+        else:
+            return curr.item.key
+
+    return gltn
+
+
+
+Tree = LinkedBinaryTree
+
+def build_complete_binary_tree(level):
+    root = Tree.Node(0)
+    q = ArrayQueue()
+    q.enqueue(root)
+    counter = 1
+    for i in range(level):
+        length = len(q)
+        for j in range(length):
+            node = q.dequeue()
+            node.left = Tree.Node(counter)
+            node.right = Tree.Node(counter + 1)
+            q.enqueue(node.left)
+            q.enqueue(node.right)
+            counter += 2
+
+    return Tree(root)
+
+tree1 = build_complete_binary_tree(2)
+tree2 = build_complete_binary_tree(3)
+
+root_full = Tree.Node(1, Tree.Node(2, Tree.Node(4, Tree.Node(7), Tree.Node(6, Tree.Node(4), Tree.Node(4), Tree.Node(1))), Tree.Node(5, Tree.Node(10), Tree.Node(10))),
+                      Tree.Node(5, Tree.Node(9), Tree.Node(9, Tree.Node(19, Tree.Node(8), Tree.Node(8)), Tree.Node(13))))
+
+full_tree = Tree(root_full)
+
+print(glt_n(full_tree, 4))
