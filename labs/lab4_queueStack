@@ -1,0 +1,72 @@
+from ArrayQueue import ArrayQueue
+
+
+class QueueStack1:
+
+    def __init__(self):
+        self.data = ArrayQueue()
+
+    def __len__(self):
+        return len(self.data)
+
+    def is_empty(self):
+        return len(self) == 0
+
+    def push(self, e):  # optimizes push runtime to O(1)*
+        """
+        add element e to the top of the stack
+        """
+        self.data.enqueue(e)
+
+    def pop(self):
+        """
+        remove and return the top element from the stack
+        if stack is empty, raise exception
+        """
+        if self.is_empty():
+            raise Exception("stack is empty")
+        for i in range(len(self.data) - 1):
+            value = self.data.dequeue
+            self.data.enqueue(value)
+        return self.data.dequeue()
+
+    def top(self):
+        """
+        return a reference to the top element of the stack without removing it
+        if stack is empty, raise exception
+        """
+        if self.is_empty():
+            raise Exception("stack is empty")
+        for i in range(len(self.data) - 1):
+            value = self.data.dequeue()
+            self.data.enqueue(value)
+        top_return = self.data.first()
+        self.data.enqueue(self.data.dequeue())
+        return top_return
+
+
+class QueueStack2:
+
+    def __init__(self):
+        self.data = ArrayQueue()
+
+    def __len__(self):
+        return len(self.data)
+
+    def is_empty(self):
+        return len(self) == 0
+
+    def push(self, e):
+        self.data.enqueue(e)
+        for i in range(len(self.data) - 1):
+            self.data.enqueue(self.data.dequeue())
+
+    def pop(self):
+        if self.is_empty():
+            raise Exception("stack is emtpy")
+        return self.data.dequeue()
+
+    def top(self):
+        if self.is_empty():
+            raise Exception("stack is empty")
+        return self.data.first()
