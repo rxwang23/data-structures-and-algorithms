@@ -1,0 +1,50 @@
+from ArrayStack import ArrayStack
+
+
+class Queue:
+    def __init__(self):
+        self.input = ArrayStack()
+        self.output = ArrayStack()
+
+    def __len__(self):
+        return len(self.input) + len(self.output)
+
+    def is_empty(self):
+        return self.input.is_empty() and self.output.is_empty()
+
+    def enqueue(self, item):
+        self.input.push(item)
+
+    def dequeue(self):
+        if self.is_empty():
+            raise Exception("Queue is empty")
+        if self.output.is_empty():
+            for i in range(len(self.input)):
+                self.output.push(self.input.pop())
+        return self.output.pop()
+
+    def first(self):
+        if self.is_empty():
+            raise Exception("Queue is empty")
+        if self.output.is_empty():
+            for i in range(len(self.input)):
+                self.output.push(self.input.pop())
+        return self.output.top()
+
+#
+# Q = AlternativeQueue()
+# for i in range(10):
+#     Q.enqueue(i+100)
+# print(len(Q))
+# print(Q.is_empty())
+# Q.enqueue(500)
+# print(Q.dequeue())
+# Q.enqueue(200)
+# Q.enqueue(201)
+# for i in range(10):
+#     print(Q.dequeue())
+#
+# print(len(Q))
+# Q.enqueue(201)
+# print(len(Q))
+# print(Q.dequeue())
