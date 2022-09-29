@@ -1,0 +1,55 @@
+def powers_of_two(n):
+    for i in range(n):
+        yield 2**i  # iterates through for loop and prints something everytime
+
+
+class Polynomial:
+    def __init__(self, lst):
+        self.data = lst
+
+    def __add__(self, other):
+        lst = self.data.copy()
+        temp = other.data.copy()
+
+        if len(lst) > len(temp):
+            lst, temp = temp, lst
+
+        while len(lst) < len(temp):
+            lst.append(0)
+
+        lst = [lst[i] + temp[i] for i in range(len(lst))]
+        return Polynomial(lst)
+
+    def __call__(self, val):
+        # val = x, x^power * coefficient
+        return sum([(val ** i) * self.data[i] for i in range(len(self.data))])
+
+    def __repr__(self):
+        return " + ".join([str(self.data[i]) + "x^" + str(i) for i in range(len(self.data) - 1, -1, -1)])
+
+    def __mul__(self, other):
+        lst = [0]*(len(self.data) + len(other.data))
+
+        for i in range(len(self.data)):
+            for j in range(len(other.data)):
+                lst[i + j] += self.data[i] + other.data[j]
+
+        return Polynomial(lst)
+
+    def derive(self):
+        for i in range(1, len(self.data)):
+            self.data[i - 1] = self.data[i]*i
+        self.data.pop()
+
+
+poly1 = Polynomial([3, 7, 0, -9, 2])  # represents 2x4 - 9x3 + 7x + 3
+poly2 = Polynomial([2, 0, 0, 5, 0, 0, 3])  # represents 3x6 + 5x3 + 2
+poly3 = poly1 + poly2
+print(poly3.data)  # return [5, 7, 0, -4, 2, 0, 3]
+print(poly1(1))  # return 3
+print(poly2(1))  # return 10
+print(poly3(1))  # return 13
+poly1.derive()  # returns none
+print(poly1)  # returns '8x^3 + -27x^2 + 7’
+poly4 = poly1 * Polynomial([1,2])
+print(poly4)  # return array of 8x3 -27x2 + 7 * (x + 2)
