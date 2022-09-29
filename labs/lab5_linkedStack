@@ -1,0 +1,43 @@
+from DoublyLinkedList import DoublyLinkedList
+
+
+class LinkedStack:
+
+    def __init__(self):
+        self.data = DoublyLinkedList()
+
+    def __len__(self):
+        """
+        :return: the number of elements in the stack
+        """
+        return len(self.data)
+
+    def is_empty(self):
+        """
+        :return: true if the stack is empty, false otherwise
+        """
+        return len(self.data) == 0
+
+    def push(self, e):
+        """
+        adds an element, e, to the top of the stack
+        """
+        self.data.add_last(e)
+
+    def top(self):
+        """
+        :return: the element at the top fo the stack.
+        raises exception if stack is empty
+        """
+        if self.is_empty:
+            raise Exception("stack is empty")
+        return self.data.trailer.prev.data
+
+    def pop(self):
+        """
+        :return: removes and returns the element at the top of the stack
+        raises exception if stack is empty
+        """
+        if self.is_empty:
+            raise Exception("stack is empty")
+        return self.data.delete_last()
