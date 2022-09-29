@@ -1,0 +1,116 @@
+from ArrayStack import ArrayStack
+
+
+def stack_sum(s):
+    """
+    :param s: ArrayStack
+    :return: int
+    """
+    if len(s) == 0:
+        return 0
+    else:
+        val = s.pop()
+        sum = val + stack_sum(s)
+        s.push(val)
+        return sum
+
+
+s = ArrayStack()
+s.push(1)
+s.push(-14)
+s.push(5)
+s.push(6)
+s.push(-7)
+s.push(9)
+s.push(10)
+s.push(-5)
+s.push(-8)
+
+print(stack_sum(s))
+
+#----------------------------------
+
+from ArrayStack import ArrayStack
+
+
+def eval_prefix(exp_str):
+    """
+    :param exp_str: str
+    :return: int
+    """
+    stack = []
+
+    exp_lst = exp_str.split(" ")
+    print(exp_lst)
+    for i in exp_lst[::-1]:
+        if i.isdigit():
+            stack.append(int(i))
+        else:
+            op1 = stack.pop()
+            op2 = stack.pop()
+            if i == "+":
+                stack.append(op1 + op2)
+            elif i == "-":
+                stack.append(op1 - op2)
+            elif i == "*":
+                stack.append(op1 * op2)
+            elif i == "/":
+                stack.append(op1 / op2)
+    return stack.pop()
+
+
+exp_str = "- + * 16 5 * 8 4 20"
+print(eval_prefix(exp_str))
+
+#----------------------------------
+
+from ArrayStack import ArrayStack
+
+
+def flatten_list(lst):
+    """
+    :param lst: list
+    :return: None
+    """
+
+    s = ArrayStack()
+
+    for i in range(len(lst)):
+        s.push(lst.pop())
+    for i in range(len(s)):
+        val = s.pop()
+        if isinstance(val, list):
+            for j in val:
+                lst.append(j)
+        else:
+            lst.append(val)
+
+
+lst = [[[[0]]], [1, 2], 3, [4, [5, 6, [7]], 8], 9]
+flatten_list(lst)
+print(lst)
+
+#----------------------------------
+
+
+from ArrayStack import ArrayStack
+
+
+def stack_sort(s):
+    """
+    :param s: ArrayStack
+    :return: None
+    """
+    helper_stack = ArrayStack()
+    while not s.is_empty():
+        temp_val = s.pop()
+        while not helper_stack.is_empty() and temp_val < helper_stack.top():
+            s.push(helper_stack.pop())
+
+        if helper_stack.is_empty():
+            helper_stack.push(temp_val)
+
+    while not helper_stack.is_empty():
+        s.push(helper_stack.pop())
+
+
