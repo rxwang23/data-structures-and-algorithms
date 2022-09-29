@@ -1,0 +1,30 @@
+from ArrayStack import ArrayStack
+from ArrayQueue import ArrayQueue
+
+
+def permutations(lst):
+    """
+    :param lst: list of integers
+    :return: list containing all the different permutations of elements in lst, each permutation represented as a list
+    """
+    perm_stack = ArrayStack()
+    perm_queue = ArrayQueue()
+    for each in lst:
+        perm_stack.push(each)
+    for i in range(len(perm_stack)):
+        val = perm_stack.pop()
+        if perm_queue.is_empty():
+            perm_queue.enqueue([val])
+        else:
+            for j in range(len(perm_queue)):
+                orig_perm = perm_queue.dequeue()
+                for k in range(len(orig_perm) + 1):
+                    new_perm = orig_perm[:]
+                    new_perm.insert(k, val)
+                    perm_queue.enqueue(new_perm)
+
+    return [perm_queue.dequeue() for i in range(len(perm_queue))]
+#
+#
+# lst = [1, 2, 3]
+# print(permutations(lst))
