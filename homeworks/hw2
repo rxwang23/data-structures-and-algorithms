@@ -1,0 +1,104 @@
+def split_parity(lst):
+    """
+    :param lst: list of integers
+    :return: list of integers with odd numbers first then even numbers
+    """
+
+    pointer = 0
+    for i in range(len(lst)):
+        if lst[i] % 2 != 0:
+            lst[i], lst[pointer] = lst[pointer], lst[i]
+            pointer += 1
+#
+#
+# lst = [1,2,7,4,9,81,2,5,7,8,22,3,4]
+# split_parity(lst)
+# print(lst)
+
+
+#---------------------------------------------
+
+def findChange(lst01):
+    low = 0
+    high = len(lst01) - 1
+    val = None
+    while low <= high:
+        mid = (low + high) // 2
+        if (lst01[mid] == 1 and lst01[mid-1] == 0) or (lst01[mid] == 0 and lst01[mid-1] == 1):
+            val = mid
+            return val
+        elif lst01[mid] == 1:
+            high = mid - 1
+        else:
+            low = mid + 1
+    return val
+
+
+print(findChange([0,1]))
+
+#---------------------------------------------
+
+def count_lowercase(s, low, high):
+    """
+    :param s: string
+    :param low: low index (assume low <= high)
+    :param high: high index
+    :return: number of lowercase letters at the positions low, low+1, ..., high
+    """
+    if low > high:
+        return 0
+
+    if s[low].islower():
+        count = 1 + count_lowercase(s, low + 1, high)
+        return count
+    else:
+        return count_lowercase(s, low + 1, high)
+
+
+def is_number_of_lowercase_even(s, low, high):
+    """
+    :param s: string
+    :param low: low index (assume low <= high)
+    :param high: high index
+    :return: True if there are even number of lowercase letters, False otherwise
+    """
+    if low > high:
+        return 0
+
+    if s[low].islower():
+        count = 1 + count_lowercase(s, low + 1, high)
+    else:
+        count = count_lowercase(s, low + 1, high)
+
+    return count % 2 == 0
+
+
+str = "HelLooooOOOO"
+print(count_lowercase(str, 2, 9))
+print(is_number_of_lowercase_even(str, 2, 9))
+
+#---------------------------------------------
+
+def split_by_sign(lst, low, high):
+    """
+    :param lst: list of non-zero integers
+    :param low: low index (assume low <= high)
+    :param high: high index
+    :return: reorder the elements in lst so all negative numbers come before positive numbers
+    """
+
+    if high >= low:
+        if lst[low] < 0 and lst[high] < 0:
+            split_by_sign(lst, low + 1, high)
+        elif lst[low] < 0 and lst[high] > 0:
+            split_by_sign(lst, low + 1, high - 1)
+        elif lst[low] > 0 and lst[high] < 0:
+            lst[low], lst[high] = lst[high], lst[low]
+            split_by_sign(lst, low + 1, high - 1)
+        else:
+            split_by_sign(lst, low, high - 1)
+
+#
+# lst = [2, -1, 2]
+# split_by_sign(lst, 0, len(lst) - 1)
+# print(lst)
