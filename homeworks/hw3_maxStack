@@ -1,0 +1,66 @@
+from ArrayStack import ArrayStack
+
+# assume user inserts only integers to stack
+
+
+class MaxStack:
+    def __init__(self):
+        self.data = ArrayStack()
+        self.maximum = None
+
+    def is_empty(self):
+        return self.data.is_empty()
+
+    def __len__(self):
+        return len(self.data)
+
+    def push(self, e):
+        """
+        adds element, e, to the top of maxS
+        """
+        self.data.push((e, self.maximum))
+        if self.maximum is None or e > self.maximum:
+            self.maximum = e
+
+    def top(self):
+        """
+        returns a reference to the top element of maxS, without removing
+        exception raised if maxS is empty
+        """
+        if self.is_empty():
+            raise Exception("MaxStack is empty")
+        else:
+            return self.data.top()[0]
+
+    def pop(self):
+        """
+        removes and return the top element of maxS
+        exception raised if maxS is empty
+        """
+        if self.is_empty():
+            raise Exception("MaxStack is empty")
+        return_tuple = self.data.pop()
+        if return_tuple[1] is None or return_tuple[0] > return_tuple[1]:
+            self.maximum = return_tuple[1]
+        return return_tuple[0]
+
+    def max(self):
+        """
+        returns the element in maxS with the largest value, without removing it
+        exception raised if maxS is empty
+        """
+        if self.is_empty():
+            raise Exception("MaxStack is empty")
+        return self.maximum
+
+# maxS = MaxStack()
+# maxS.push(3)
+# maxS.push(1)
+# maxS.push(6)
+# maxS.push(4)
+# maxS.push(500)
+# maxS.push(-10)
+# print(maxS.max())
+# print(maxS.pop())
+# print(maxS.pop())
+# print(maxS.max())
