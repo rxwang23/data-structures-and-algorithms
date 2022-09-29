@@ -1,0 +1,51 @@
+from LinkedBinaryTree import LinkedBinaryTree
+
+
+def min_and_max(bin_tree):
+    """
+    returns a tuple containing the min, max values in the linked binary tree
+    """
+    if bin_tree.root is None:
+        raise Exception("Tree is empty")
+
+    def subtree_min_and_max(root):
+        """
+        returns the min, max tuple for the subtree rooted by 'root'
+        """
+        if root.left is None and root.right is None:
+            return root.data, root.data
+        elif root.left is not None and root.right is None:
+            left_tuple = subtree_min_and_max(root.left)
+            min_val = min(left_tuple[0], root.data)
+            max_val = max(left_tuple[1], root.data)
+            return min_val, max_val
+        elif root.left is None and root.right is not None:
+            right_tuple = subtree_min_and_max(root.right)
+            min_val = min(right_tuple[0], root.data)
+            max_val = max(right_tuple[1], root.data)
+            return min_val, max_val
+        else:
+            left_tuple = subtree_min_and_max(root.left)
+            right_tuple = subtree_min_and_max(root.right)
+            min_val = min(left_tuple[0], right_tuple[0], root.data)
+            max_val = max(left_tuple[1], right_tuple[1], root.data)
+            return min_val, max_val
+
+    return subtree_min_and_max(bin_tree.root)
+
+# def main():
+#     a = LinkedBinaryTree.Node(5)
+#     b = LinkedBinaryTree.Node(1)
+#     c = LinkedBinaryTree.Node(8)
+#     d = LinkedBinaryTree.Node(4)
+#     e = LinkedBinaryTree.Node(9, a, b)
+#     f = LinkedBinaryTree.Node(2, e)
+#     g = LinkedBinaryTree.Node(7, c, d)
+#     h = LinkedBinaryTree.Node(3, f, g)
+#
+#     tree = LinkedBinaryTree(h)
+#     for i in tree:
+#         print(i)
+#     print(min_and_max(tree))
+#
+# main()
