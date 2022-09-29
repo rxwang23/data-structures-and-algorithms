@@ -1,0 +1,59 @@
+from ArrayStack import ArrayStack
+# assume that input numbers are ints (not floats), operations are only +,-,*,/
+
+str_input = input("--> ")
+var_dict = dict()
+
+while str_input != "done()":
+    lst_input = str_input.split()
+    stack = ArrayStack()
+    result = 0
+
+    if len(lst_input) > 1 and lst_input[1] == "=":  # assignment expression
+        key = lst_input[0]
+        for each in lst_input[2:]:
+            if each in "+-*/":
+                elem1 = stack.pop()
+                elem2 = stack.pop()
+                if elem1 == 0 and each == "/":
+                    raise ZeroDivisionError
+                if each == "+":
+                    result = elem2 + elem1
+                elif each == "-":
+                    result = elem2 - elem1
+                elif each == "*":
+                    result = elem2 * elem1
+                elif each == "/":
+                    result = elem2 / elem1
+                stack.push(result)
+            elif each.isdigit():
+                stack.push(int(each))
+            else:
+                stack.push(var_dict[each])
+        var_dict[key] = stack.pop()
+        print(key)
+
+    else:
+        for each in lst_input:
+            if each in "+-*/":
+                elem1 = stack.pop()
+                elem2 = stack.pop()
+                if elem1 == 0 and each == "/":
+                    raise ZeroDivisionError
+                if each == "+":
+                    result = elem2 + elem1
+                elif each == "-":
+                    result = elem2 - elem1
+                elif each == "*":
+                    result = elem2 * elem1
+                elif each == "/":
+                    result = elem2 / elem1
+                stack.push(result)
+            elif each.isdigit():
+                stack.push(int(each))
+            else:
+                stack.push(var_dict[each])
+        final = stack.pop()
+        print(final)
+
+    str_input = input("--> ")
