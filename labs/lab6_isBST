@@ -1,0 +1,33 @@
+from BinarySearchTreeMap import BinarySearchTreeMap
+
+
+def is_BST(root):
+    def is_BST_helper(root):
+        """
+        return the tuple triplet min, max, bool
+        """
+        if root.left is None and root.right is None:
+            return root.item.key, root.item.key, True
+
+        elif root.left is not None and root.right is None:
+            left_tuple = is_BST_helper(root.left)
+            if root.item.key > left_tuple[1] and left_tuple[2]:
+                return left_tuple[0], root.item.key, True
+            return left_tuple[0], root.item.key, False
+
+        elif root.left is None and root.right is not None:
+            right_tuple = is_BST_helper(root.right)
+            if root.item.key < right_tuple[1] and right_tuple[2]:
+                return root.item.key, right_tuple[1], True
+            return root.item.key, right_tuple[1], False
+
+        else:
+            left_tuple = is_BST_helper(root.left)
+            right_tuple = is_BST_helper(root.right)
+            if left_tuple[1] < root.item.key < right_tuple[1] and left_tuple[2] and right_tuple[2]:
+                return left_tuple[0], right_tuple[1], True
+            else:
+                return left_tuple[0], right_tuple[1], False
+    return is_BST_helper(root)[2]
+
+
