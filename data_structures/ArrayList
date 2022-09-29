@@ -1,0 +1,183 @@
+import ctypes  # provides low-level arrays
+
+def make_array(n):
+    return (n * ctypes.py_object)()
+
+class ArrayList:
+    def __init__(self):
+        self.data_arr = make_array(1)
+        self.n = 0  # actual length
+        self.capacity = 1
+        # pass
+
+    def __len__(self): # theta(1)
+        return self.n
+        # pass
+
+    def append(self, val):  # amortized theta(1)
+        if self.n == self.capacity:
+            self.resize(2 * self.capacity)
+            #self.resize(self.capacity+100)
+        self.data_arr[self.n]= val
+        self.n += 1
+        # pass
+
+    def resize(self, new_size): # memory limitation, expensive (for loop)
+        new_array = make_array(new_size)  # more room 
+        for i in range(self.n):
+            new_array[i] = self.data_arr[i]
+        self.data_arr = new_array
+        self.capacity = new_size
+        # pass
+
+    def __getitem__(self, ind):  # theta(1)
+        if ind < 0:
+            ind = self.n + ind  # if ind = -1, last index
+        if ind < 0:
+            raise IndexError("Index is out of range!!!")
+        if ind >= self.n:
+            raise IndexError("Index is out of range!!!")
+        return self.data_arr[ind]
+        # pass
+
+    def __setitem__(self, ind, val):  # theta(1)
+        if ind < 0:
+            ind = self.n + ind  # if ind = -1, last index
+        if ind < 0:
+            raise IndexError("Index is out of range!!!")
+        if ind >= self.n:
+            raise IndexError("Index is out of range!!!")
+
+        self.data_arr[ind] = val
+        # pass
+
+    def __iter__(self): # theta(n)
+        for i in range(self.n):
+            yield self.data_arr[i]
+        # pass
+
+    def extend(self, iter_collection):
+        for each in iter_collection:
+            self.append(each)
+        # pass
+
+        
+    def index(self, val):
+        # we will do in class
+        # Return the index of first occurrence of element val, 
+        # if not found in the ArrayList return None.
+        # Your code
+
+        for i in range(self.n):
+            if self.data_arr[i] == val: # or self[i] == val
+                return i
+        return None
+        # pass
+
+    def count(self, val):
+        # we will do in class
+        # return how many times element val is present in the ArrayList
+        # Your code
+
+        counter = 0
+        for i in self:
+            if i == val:
+                counter += 1
+        return counter
+        # pass
+        
+    def is_empty(self):
+        # return True if ArrayList is empty, otherwise return False
+        return self.n == 0
+        # pass
+
+    # LAB 3:
+    def pop(self, ind = -1):  # theta n (if pop(), theta 1 *)
+        if not -self.n <= ind <= self.n - 1:
+            raise IndexError("invalid index")
+        if ind < 0:
+            ind = self.n + ind
+        elem = self.data_arr[ind]
+        for i in range(ind+1, self.n):
+            self.data_arr[i-1] = self.data_arr[i]
+        self.data_arr[self.n - 1] = None
+        self.n -= 1
+        if self.n < self.capacity // 4:
+            self.resize(self.capacity // 2)
+        return elem
+
+    def insert(self, ind, value):
+        if not -self.n <= ind <= self.n - 1:
+            raise IndexError("invalid index")
+        if ind < 0:
+            ind = self.n + ind
+        if self.n == self.capacity:
+            self.resize(2 * capacity)
+        for j in range(self.n, ind, -1):
+            self.data_arr[j] = self.data_arr[j-1]
+        self.data_arr[ind] = value
+        self.n += 1
+
+    def __repr__(self):
+        result = [str(self.data[i]) for i in range(self.n)]
+        return "[" + ", ".join(result) + "]"
+
+    def __add__(self, other):
+        lst = ArrayList()
+        lst += self
+        lst += other
+        return lst
+
+    def __iadd__(self, other):
+        self.extend(other)
+        return self
+
+    def __mul__(self, scalar):
+        lst = ArrayList()
+        for i in range(scalar):
+            lst.extend(self)
+
+    def __rmul__(self, scalar):
+        return self * scalar
+
+    def remove(self, val):
+        if val in self:
+            data = make_array(self.capacity)
+
+            i = 0
+            while self[i] != val:
+                data[i] = self[i]
+                i += 1
+            while i < self.n - 1:
+                data[i] = self[i+1]
+                i += 1
+            self.data = data
+            self.n -= 1
+
+    def removeAll(self, val):
+        count = 0
+        for i in self:
+            if i == val:
+                count += 1
+        data = make_array(self.capacity)
+
+        index = 0
+        for i in self:
+            if i != val:
+                data[index] = i
+                index += 1
+        self.data = data
+        self.n -= count
+
+    def reverse(self):
+        low = 0
+        high = self.n  - 1
+        while low < high:
+            self[low], self[high] = self[high], self[low]
+            low += 1
+            high -= 1
+
+
+if __name__ == "__main__":
+    lst = ArrayList()
+    print(lst.pop(2))
