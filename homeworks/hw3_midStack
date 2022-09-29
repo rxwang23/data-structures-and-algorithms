@@ -1,0 +1,68 @@
+from ArrayStack import ArrayStack
+from ArrayDeque import ArrayDeque
+
+
+class MidStack:
+    def __init__(self):
+        self.part_1 = ArrayStack()
+        self.part_2 = ArrayDeque()
+
+    def is_empty(self):
+        return self.part_1.is_empty() and self.part_2.is_empty()
+
+    def __len__(self):
+        return len(self.part_1) + len(self.part_2)
+
+    def push(self, e):
+        """
+        adds element, e, to the top of midS
+        """
+        self.part_2.enqueue_last(e)
+        if len(self.part_1) < len(self.part_2):
+            self.part_1.push(self.part_2.dequeue_first())
+
+    def top(self):
+        """
+        returns a reference to the top element of midS, without removing it
+        exception raised if midS is empty
+        """
+        if self.is_empty():
+            raise Exception("MidStack is empty")
+        if self.part_2.is_empty():
+            return self.part_1.top()
+        return self.part_2.last()
+
+    def pop(self):
+        """
+        removes and returns the top element from midS
+        exception raised if midS is empty
+        """
+        if self.is_empty():
+            raise Exception("MidStack is empty")
+        if len(self.part_1) > len(self.part_2):
+            self.part_2.enqueue_first(self.part_1.pop())
+        return self.part_2.dequeue_last()
+
+    def mid_push(self, e):
+        """
+        adds element, e, in the middle of midS
+        """
+        if len(self.part_1) > len(self.part_2):  # assume if odd number of elements
+            self.part_2.enqueue_first(e)
+        else:
+            self.part_1.push(e)
+
+#
+# midS = MidStack()
+# midS.push(2)
+# midS.push(4)
+# midS.push(6)
+# midS.push(8)
+# midS.mid_push(12)
+# print(midS.pop())
+# print(midS.pop())
+# print(midS.pop())
+# print(midS.pop())
+# print(midS.pop())
+
+
